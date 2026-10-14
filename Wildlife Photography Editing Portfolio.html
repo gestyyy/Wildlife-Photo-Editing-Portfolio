@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestyyy — Before & After Portfolio</title>
+<style>
+  :root {
+    --bg: #f6f4f0; --ink: #20201f; --muted: #77736d;
+    --accent: #b66e4d; --card: #fffdfa; --line: #e5dfd7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: Inter, "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+  .nav { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px clamp(20px, 6vw, 84px); border-bottom:1px solid var(--line); }
+  .brand { font-size:1.05rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+  .brand span { color:var(--accent); }
+  .navlinks { display:flex; gap:26px; color:var(--muted); font-size:.9rem; }
+  .hero { padding: clamp(54px, 9vw, 118px) clamp(20px, 6vw, 84px) 70px; display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; }
+  .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.18em; font-size:.75rem; font-weight:800; }
+  h1 { font-size:clamp(2.7rem, 6vw, 5.8rem); line-height:.98; letter-spacing:-.065em; margin:18px 0 24px; max-width:760px; }
+  h1 em { font-family:Georgia, serif; font-weight:400; }
+  .intro { color:var(--muted); font-size:1.08rem; line-height:1.8; max-width:520px; }
+  .cta { display:inline-block; background:var(--ink); color:white; padding:15px 22px; border-radius:4px; margin-top:18px; font-size:.9rem; font-weight:700; }
+  .hero-art { position:relative; min-height:370px; border-radius:8px; overflow:hidden; background:#d9c9bc; }
+  .hero-art img { width:100%; height:100%; min-height:370px; object-fit:cover; display:block; }
+  .hero-note { position:absolute; bottom:18px; left:18px; padding:12px 15px; background:rgba(255,253,250,.92); border-radius:4px; font-size:.8rem; letter-spacing:.06em; }
+  section { padding:60px clamp(20px, 6vw, 84px); }
+  .section-head { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:30px; }
+  h2 { font-size:clamp(2rem, 4vw, 3.5rem); letter-spacing:-.05em; margin:8px 0 0; }
+  .section-head p { color:var(--muted); max-width:390px; line-height:1.7; margin:0; }
+  .gallery { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px; }
+  .project { background:var(--card); border:1px solid var(--line); padding:12px; border-radius:7px; }
+  .compare { --split:50%; position:relative; aspect-ratio: 4 / 3; overflow:hidden; border-radius:4px; background:#ded7cf; isolation:isolate; }
+  .compare.portrait-only {
+  aspect-ratio: 3 / 4;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto; }
+  .compare img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; user-select:none; pointer-events:none; }
+  .compare .after { clip-path:inset(0 0 0 var(--split)); }
+  .compare .divider { position:absolute; z-index:3; top:0; bottom:0; left:var(--split); width:2px; background:#fff; transform:translateX(-50%); pointer-events:none; }
+  .compare .handle {
+  position: absolute;
+  z-index: 4;
+  left: var(--split);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 1);
+  background: rgba(32, 32, 31, 0.69);
+  color: rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 12px #0003;
+  pointer-events: none; }
+  .compare input { position:absolute; z-index:5; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:ew-resize; }
+  .tag { position:absolute; z-index:2; top:12px; padding:7px 10px; background:rgba(25,25,25,.72); color:white; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; border-radius:3px; pointer-events:none; }
+  .tag.before {
+  left: 12px; }
+  .tag.after-label {
+  right: 12px; }
+  .tag.before,
+  .tag.after-label {
+  transition: opacity 0.15s ease; }
+  .compare .tag.before,
+  .compare .tag.after-label {
+  opacity: 1; }
+  .compare.hide-before .tag.before,
+  .compare.hide-after .tag.after-label {
+  opacity: 0; }
+  .project-info { display:flex; justify-content:space-between; align-items:start; gap:12px; padding:15px 4px 5px; }
+  .project-info h3 { margin:0 0 6px; font-size:1rem; }
+  .project-info p { color:var(--muted); margin:0; font-size:.84rem; }
+  .number { color:var(--accent); font-size:.8rem; font-weight:800; }
+  .services { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:28px; }
+  .service { padding:24px; border:1px solid var(--line); background:var(--card); border-radius:6px; }
+  .service .icon { font-size:1.35rem; color:var(--accent); }
+  .service h3 { margin:14px 0 8px; }
+  .service p { margin:0; color:var(--muted); line-height:1.7; font-size:.92rem; }
+  .contact { margin:20px clamp(20px, 6vw, 84px) 60px; padding:clamp(28px, 6vw, 64px); background:#242321; color:white; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:28px; }
+  .contact h2 { max-width:650px; }
+  .contact p { color:#c9c4bd; line-height:1.7; }
+  .contact .cta { background:#f5e8dd; color:#242321; white-space:nowrap; }
+  footer { padding:25px clamp(20px, 6vw, 84px); display:flex; justify-content:space-between; gap:20px; border-top:1px solid var(--line); color:var(--muted); font-size:.8rem; }
+  @media (max-width:800px) {
+    .hero { grid-template-columns:1fr; }
+    .hero-art { min-height:300px; }
+    .hero-art img { min-height:300px; }
+    .section-head { display:block; }
+    .section-head p { margin-top:15px; }
+    .gallery { grid-template-columns:1fr; }
+    .services { grid-template-columns:1fr; }
+    .contact { display:block; }
+    .contact .cta { margin-top:10px; }
+  }
+  @media (max-width:520px) {
+    .navlinks { gap:12px; font-size:.78rem; }
+    .brand { font-size:.9rem; }
+    footer { display:block; line-height:1.8; }
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#">Gestyyy<span>.</span>Edit</a>
+  <nav class="navlinks" aria-label="Main navigation">
+    <a href="#portfolio">Portfolio</a><a href="#services">Services</a><a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Photo retouching · Color · Light</div>
+      <h1>Wildlife Photography <em>Editing.</em><br></h1>
+      <p class="intro">A clean, modern portfolio for showcasing my photo-editing work.</p>
+      <a class="cta" href="#portfolio">Explore the edits&nbsp; ↓</a>
+    </div>
+    <div class="hero-art">
+      <img src="https://github.com/gestyyy/Gestyyy/blob/main/_DSF0498%20-%20Copy.jpg?raw=true" alt="">
+      <div class="hero-note">YOUR CREATIVE VISION, FINELY EDITED</div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="section-head">
+      <div><div class="eyebrow">Selected work</div><h2>Before / After</h2></div>
+      <p>Move the slider left or right to reveal the transformation.</p>
+    </div>
+    <div class="gallery">
+      <article class="project">
+        <div class="compare portrait-only" style="--split:50%">
+          <img src="https://github.com/gestyyy/Wildlife-Photography-Edited-Images/blob/main/coral-bleaching-threat-sealife%20edited.jpg?raw=true" alt="Raw">
+          <img class="after" src="https://github.com/gestyyy/Wildlife-Photography-Raw-Images/blob/main/coral-bleaching-threat-sealife.jpg?raw=true" alt="Edited">
+          <span class="tag before">Before</span><span class="tag after-label">After</span>
+          <div class="divider"></div><div class="handle">↔</div>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare portrait before and after">
+        </div>
+        <div class="project-info"><div><h3></h3><p></p></div><span class="number">01</span></div>
+      </article>
+      <article class="project">
+        <div class="compare portrait-only" style="--split:50%">
+          <img src="https://github.com/gestyyy/Wildlife-Photography-Edited-Images/blob/main/African_Bush_Elephant%20edited.jpg?raw=true" alt="Raw">
+          <img class="after" src="https://github.com/gestyyy/Wildlife-Photography-Raw-Images/blob/main/African_Bush_Elephant.jpg?raw=true" alt="Edited">
+          <span class="tag before">Before</span><span class="tag after-label">After</span>
+          <div class="divider"></div><div class="handle">↔</div>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare male portrait before and after">
+        </div>
+        <div class="project-info"><div><h3></h3><p></p></div><span class="number">02</span></div>
+      </article>
+      <article class="project">
+        <div class="compare" style="--split:50%">
+          <img src="https://github.com/gestyyy/Wildlife-Photography-Edited-Images/blob/main/amazing-bengal-tiger-nature%20edited.jpg?raw=true" alt="Raw">
+          <img class="after" src="https://github.com/gestyyy/Wildlife-Photography-Raw-Images/blob/main/amazing-bengal-tiger-nature.jpg?raw=true" alt="Edited">
+          <span class="tag before">Before</span><span class="tag after-label">After</span>
+          <div class="divider"></div><div class="handle">↔</div>
+          <input type="range" min="0" max="100" value="50" aria-label="">
+        </div>
+        <div class="project-info"><div><h3></h3><p></p></div><span class="number">03</span></div>
+      </article>
+      <article class="project">
+        <div class="compare" style="--split:50%">
+          <img src="https://github.com/gestyyy/Wildlife-Photography-Edited-Images/blob/main/ampl598-lioness-stalking-raw-no-develop-settigns-output-as-jpeg.jpg?raw=true" alt="Raw">
+          <img class="after" src="https://github.com/gestyyy/Wildlife-Photography-Raw-Images/blob/main/ampl598-lioness-stalking-raw-no-develop-settigns-output-as-jpeg.jpg?raw=true" alt="Edited">
+          <span class="tag before">Before</span><span class="tag after-label">After</span>
+          <div class="divider"></div><div class="handle">↔</div>
+          <input type="range" min="0" max="100" value="50" aria-label="">
+        </div>
+        <div class="project-info"><div><h3></h3><p></p></div><span class="number">04</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="eyebrow">What I do</div><h2>Editing services</h2>
+    <div class="services">
+      <article class="service"><div class="icon">✳</div><h3>Photo Editing</h3><p>Natural-looking outputs, Wildlife, Portrait Retouching, and Real Estate Editing.</p></article>
+      <article class="service"><div class="icon">◐</div><h3>Color & Light</h3><p>Balanced exposure, polished color grading, and consistent tones across a set.</p></article>
+      <article class="service"><div class="icon">✧</div><h3>Creative Finishing</h3><p>Background cleanup, image refinement, and a cohesive final visual style.</p></article>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div><div class="eyebrow">Have a project?</div><h2>Let’s make your images stand out.</h2><p>Email:
+	<br>rglopena.8399@gmail.com</br></p></div>
+    <a class="cta" href="mailto:rglopena.8399@gmail.com
+">Email me ↗</a>
+  </section>
+</main>
+<footer><span>© <span id="year"></span> Studio Edit. All rights reserved.</span><span>Photo editing portfolio · Before & after comparisons</span></footer>
+<script>
+  document.querySelectorAll('.compare').forEach((compare) => {
+    const slider = compare.querySelector('input[type="range"]');
+
+    const update = () => {
+      const min = Number(slider.min || 0);
+      const max = Number(slider.max || 100);
+      const value = Number(slider.value);
+      const split = ((value - min) / (max - min)) * 100;
+
+      compare.style.setProperty('--split', split + '%');
+
+const fadeDistance = 50;
+const beforeOpacity = Math.min(1, (100 - split) / fadeDistance);
+const afterOpacity = Math.min(1, split / fadeDistance);
+
+const beforeLabel = compare.querySelector('.tag.before');
+const afterLabel = compare.querySelector('.tag.after-label');
+
+if (beforeLabel) {
+  beforeLabel.style.opacity = beforeOpacity;
+}
+
+if (afterLabel) {
+  afterLabel.style.opacity = afterOpacity;
+}
+
+if (split >= 99) {
+  compare.classList.add('hide-before');
+}
+if (split <= 1) {
+  compare.classList.add('hide-after');
+}
+  };
+    slider.addEventListener('input', update);
+    update();
+  });
+
+  document.getElementById('year').textContent =
+    new Date().getFullYear();
+</script>
+</body>
+</html>
