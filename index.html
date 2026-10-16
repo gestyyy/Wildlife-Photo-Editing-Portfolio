@@ -102,6 +102,80 @@
     .brand { font-size:.9rem; }
     footer { display:block; line-height:1.8; }
   }
+	
+/* Dark mode toggle switch */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-switch {
+  width: 54px;
+  height: 29px;
+  border-radius: 30px;
+  background: #343434;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  transition: background 0.25s ease;
+}
+
+.theme-switch::before {
+  content: "☀";
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: white;
+  color: #343434;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  transition: transform 0.25s ease;
+}
+
+body.dark-mode .theme-switch {
+  background: var(--accent);
+}
+
+body.dark-mode .theme-switch::before {
+  content: "☾";
+  transform: translateX(25px);
+}
+
+body.dark-mode {
+  --bg: #171716;
+  --ink: #f4f0e9;
+  --muted: #b8b2a9;
+  --card: #242321;
+  --line: #3c3935;
+  --accent: #d69a77;
+}
+
+body.dark-mode .hero-note {
+  background: rgba(36, 35, 33, 0.94);
+  color: #f4f0e9;
+}
+
+body.dark-mode .cta {
+  background: var(--accent);
+  color: #171716;
+}
+
+body.dark-mode .contact .cta {
+  background: #f5e8dd;
+  color: #242321;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
 </style>
 </head>
 <body>
@@ -109,9 +183,22 @@
   <a class="brand" href="#">Gestyyy<span>.</span>Edit</a>
   <nav class="navlinks" aria-label="Main navigation">
     <a href="#portfolio">Portfolio</a><a href="#services">Services</a><a href="#contact">Contact</a>
-  </nav>
-</header>
+  
+</nav>
 
+<button
+  class="theme-toggle"
+  id="themeToggle"
+  type="button"
+  aria-label="Switch to dark mode"
+  aria-pressed="false"
+>
+  <span id="themeLabel">Light</span>
+  <span class="theme-switch" aria-hidden="true"></span>
+</button>
+
+</header>
+	
 <main>
   <section class="hero">
     <div>
@@ -232,6 +319,37 @@ if (split <= 1) {
 
   document.getElementById('year').textContent =
     new Date().getFullYear();
+</script>
+	
+<script>
+const toggle = document.getElementById("themeToggle");
+const label = document.getElementById("themeLabel");
+
+function setTheme(isDark) {
+  document.body.classList.toggle("dark-mode", isDark);
+  toggle.setAttribute("aria-pressed", String(isDark));
+  toggle.setAttribute(
+    "aria-label",
+    isDark ? "Switch to light mode" : "Switch to dark mode"
+  );
+  label.textContent = isDark ? "Dark" : "Light";
+
+  try {
+    localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
+  } catch (error) {
+    // Theme switching still works if storage is unavailable.
+  }
+}
+
+try {
+  setTheme(localStorage.getItem("portfolio-theme") === "dark");
+} catch (error) {
+  setTheme(false);
+}
+
+toggle.addEventListener("click", function () {
+  setTheme(!document.body.classList.contains("dark-mode"));
+});
 </script>
 </body>
 </html>
